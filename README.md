@@ -1,3 +1,6 @@
+![NetPractice](./imagas/image.jpg)
+
+
 # 🌐 NetPractice — Networking Fundamentals (42 Project)
 
 Welcome to **NetPractice**, an interactive project from **42 School** that helps you learn how computer networks work — one IP, one subnet, and one packet at a time.
