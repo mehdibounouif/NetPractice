@@ -311,5 +311,23 @@ By the end, you’ll understand how **data travels**, **networks interconnect**,
 
 # Levels
 
-> _“The network is the computer.” – John Gage_
-
+## Level_1
+![NetPractice](./imagas/level1.png)
+## Level_2
+![NetPractice](./imagas/level2.png)
+## Level_3
+![NetPractice](./imagas/level3.png)
+## Level_4
+![NetPractice](./imagas/level4.png)
+## Level_5
+![NetPractice](./imagas/level5.png)
+## Level_6
+![NetPractice](./imagas/level6.png)
+## Level_7
+![NetPractice](./imagas/level7.png)
+## Level_8
+![NetPractice](./imagas/level8.png)
+## Level_9
+![NetPractice](./imagas/level9.png)
+## Level_10
+![NetPractice](./imagas/level10.png)
