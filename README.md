@@ -137,27 +137,158 @@ Example:
 
 ## 🧠 How to Calculate a Subnet Mask (Step by Step)
 
-Let’s take an example: `192.168.1.10/26`
+Subnetting may look intimidating at first, but it’s actually a logical process once you understand how IP addresses and binary math work together.
 
-1. **Write the CIDR notation**: `/26` means the first 26 bits are network bits.  
-2. **Convert to binary mask**:
+Let’s break it down thoroughly.
+
+---
+
+### 🧩 Step 1. Understand the IP and CIDR Notation
+
+Example:  
+
+```
+192.168.1.10/26
+```
+
+- `192.168.1.10` → The IP address  
+- `/26` → The **CIDR prefix**, meaning the **first 26 bits** are reserved for the **network** part, and the remaining bits (32 - 26 = 6 bits) are for **hosts**.
+
+---
+
+### 💡 Step 2. Write the Subnet Mask in Binary
+
+Start with 32 bits (4 octets, 8 bits each):
+
+
+---
 ```
 11111111.11111111.11111111.11000000
 ```
-3. **Convert to decimal**:
-```
-255.255.255.192
-```
 
-4. **Find the block size**:  
-`256 - 192 = 64`
-5. **Find subnet ranges**:
-- 192.168.1.0 → Network address  
-- 192.168.1.1 – 192.168.1.62 → Usable hosts  
-- 192.168.1.63 → Broadcast address
+Why? Because `/26` means the first 26 bits are **1** (network bits), and the remaining 6 are **0** (host bits).
 
-✅ Your subnet mask: **255.255.255.192**  
-✅ 62 usable hosts per subnet
+---
+
+### 🔢 Step 3. Convert the Binary to Decimal
+
+Now convert each octet (group of 8 bits) into its decimal equivalent:
+
+| Binary | Decimal |
+|--------|----------|
+| 11111111 | 255 |
+| 11111111 | 255 |
+| 11111111 | 255 |
+| 11000000 | 192 |
+
+✅ **Subnet mask:** `255.255.255.192`
+
+---
+
+### 📏 Step 4. Find the Block Size
+
+To find how large each subnet is:
+Block size = 256 - (last octet value in subnet mask)
+
+
+For `/26` → last octet = 192  
+→ `256 - 192 = 64`
+
+So, each subnet covers **64 IP addresses**.
+
+---
+
+### 📍 Step 5. Find Subnet Ranges
+
+Since each block is 64 addresses wide, start from 0 and add 64 each time:
+
+| Subnet | Range | Usable Hosts | Broadcast |
+|---------|--------|---------------|------------|
+| 1 | 192.168.1.0 → 192.168.1.63 | 192.168.1.1 → 192.168.1.62 | 192.168.1.63 |
+| 2 | 192.168.1.64 → 192.168.1.127 | 192.168.1.65 → 192.168.1.126 | 192.168.1.127 |
+| 3 | 192.168.1.128 → 192.168.1.191 | 192.168.1.129 → 192.168.1.190 | 192.168.1.191 |
+| 4 | 192.168.1.192 → 192.168.1.255 | 192.168.1.193 → 192.168.1.254 | 192.168.1.255 |
+
+Now find where your IP (`192.168.1.10`) fits:
+
+→ It belongs to **Subnet 1** (`192.168.1.0/26`).
+
+✅ **Network Address:** 192.168.1.0  
+✅ **First Usable:** 192.168.1.1  
+✅ **Last Usable:** 192.168.1.62  
+✅ **Broadcast:** 192.168.1.63  
+✅ **Usable Hosts:** 2⁶ − 2 = **62 hosts**
+
+---
+
+### 🧮 Step 6. General Formula for Subnet Calculations
+
+| Parameter | Formula | Example (/26) |
+|------------|----------|---------------|
+| **Subnet Mask** | Derived from prefix | 255.255.255.192 |
+| **Network Bits** | Equal to prefix | 26 bits |
+| **Host Bits** | 32 − prefix | 6 bits |
+| **Hosts per Subnet** | (2^host_bits) − 2 | (2⁶ − 2) = 62 |
+| **Number of Subnets (Class C)** | 2^(prefix − 24) | 2^(26 − 24) = 4 |
+| **Block Size** | 256 − (last mask octet) | 64 |
+
+---
+
+### 🔁 Step 7. More Examples
+
+#### Example 1: `10.0.0.5/30`
+- Subnet mask: `/30` → `255.255.255.252`
+- Host bits: `32 − 30 = 2`
+- Hosts per subnet: `2² − 2 = 2`
+- Block size: `256 − 252 = 4`
+- Subnet ranges:
+  - 10.0.0.0 → 10.0.0.3  
+  - Usable: 10.0.0.1 – 10.0.0.2  
+  - Broadcast: 10.0.0.3  
+  ✅ *Only 2 usable hosts (common in point-to-point links).*
+
+---
+
+#### Example 2: `172.16.50.200/20`
+- `/20` → 255.255.240.0
+- Host bits: 12 → (2¹² − 2 = 4094 hosts)
+- Block size: `256 − 240 = 16`
+- Subnets increase by 16 in the **third octet**:
+  - 172.16.0.0/20  
+  - 172.16.16.0/20  
+  - 172.16.32.0/20  
+  - 172.16.48.0/20 ← contains our IP
+  - Network: 172.16.48.0  
+  - Broadcast: 172.16.63.255  
+  ✅ *Usable range:* 172.16.48.1 – 172.16.63.254
+
+---
+
+#### Example 3: `192.168.10.75/29`
+- `/29` → 255.255.255.248  
+- Host bits: 3 → (2³ − 2 = 6 hosts)
+- Block size: `256 − 248 = 8`
+- Subnets:  
+  192.168.10.0, 192.168.10.8, 192.168.10.16, ...
+- Our IP (`75`) → falls in `192.168.10.72/29`
+  - Network: 192.168.10.72  
+  - Usable: 192.168.10.73 – 192.168.10.78  
+  - Broadcast: 192.168.10.79  
+  ✅ *6 usable hosts per subnet.*
+
+---
+
+### 🧠 Quick Reference Table
+
+| CIDR | Subnet Mask | Hosts/Subnet | Block Size |
+|------|--------------|---------------|-------------|
+| /24 | 255.255.255.0 | 254 | 1 |
+| /25 | 255.255.255.128 | 126 | 128 |
+| /26 | 255.255.255.192 | 62 | 64 |
+| /27 | 255.255.255.224 | 30 | 32 |
+| /28 | 255.255.255.240 | 14 | 16 |
+| /29 | 255.255.255.248 | 6 | 8 |
+| /30 | 255.255.255.252 | 2 | 4 |
 
 ---
 
@@ -176,6 +307,9 @@ By the end, you’ll understand how **data travels**, **networks interconnect**,
 **Date:** *[Month, Year]*  
 
 ---
+
+
+# Levels
 
 > _“The network is the computer.” – John Gage_
 
