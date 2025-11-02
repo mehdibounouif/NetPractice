@@ -303,8 +303,8 @@ By the end, you’ll understand how **data travels**, **networks interconnect**,
 
 **Project:** NetPractice  
 **School:** 42  
-**Written by:** *[Your Name]*  
-**Date:** *[Month, Year]*  
+**Written by:** *[mehdi bounouif]*  
+**Date:** *[11, 2025]*  
 
 ---
 
